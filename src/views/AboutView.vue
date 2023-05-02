@@ -24,6 +24,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useLoginStore } from '@/stores/login';
 
 const nome = ref("Mineda");
 const senha = ref("senha123");
@@ -35,12 +36,20 @@ const usuarios = ref([
 
 const contador = ref(1);
 
+const store = useLoginStore();
+
+const config = {
+  headers: {
+    authorization: store.token
+  }
+};
+
 function incrementar() {
   contador.value++;
 }
 
 async function atualizar() {
-  usuarios.value = (await axios.get('usuario')).data;
+  usuarios.value = (await axios.get('usuario', config)).data;
 }
 
 async function cadastrar() {
